@@ -1,0 +1,300 @@
+/* ==========================================================================
+   CUSTOM.CSS — SERENDIPPO RECORDS
+   Néo-brutalisme psychédélique : couleurs saturées, bordures épaisses,
+   ombres dures, éléments inclinés, typo géante, mouvement permanent.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PALETTE — Variables CSS sur :root (light) + .dark / prefers-color-scheme
+   -------------------------------------------------------------------------- */
+:root {
+  /* Accents (inchangés entre light/dark) */
+  --accent-magenta: #FF2E93;
+  --accent-cobalt:  #2B2BFF;
+  --accent-cyan:    #00E5FF;
+  --accent-violet:  #8A2BE2;
+  --accent-lime:    #B6FF00;
+
+  /* Mode CLAIR (défaut) */
+  --bg:  #F3F0FF;   /* blanc froid */
+  --fg:  #14112B;   /* texte principal */
+  --bg-alt: #E8E0FF;
+  --border: #14112B;
+  --shadow: 4px 4px 0 var(--fg);
+
+  /* Accent de la page (défini par custom.js via --accent) */
+  --accent: var(--accent-magenta);
+}
+
+/* Mode SOMBRE */
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    --bg:  #0B0B1E;
+    --fg:  #F5F3FF;
+    --bg-alt: #14112B;
+    --border: #F5F3FF;
+    --shadow: 4px 4px 0 var(--fg);
+  }
+}
+html.dark {
+  --bg:  #0B0B1E;
+  --fg:  #F5F3FF;
+  --bg-alt: #14112B;
+  --border: #F5F3FF;
+  --shadow: 4px 4px 0 var(--fg);
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION — Toutes les animations/transitions dans ce bloc
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* --- FOND VIVANT --- */
+  html::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%,  var(--accent-magenta) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 90%,  var(--accent-cyan)    0%, transparent 55%),
+      radial-gradient(ellipse 90% 70% at 50% 50%,  var(--accent-violet)  0%, transparent 50%),
+      var(--bg);
+    background-size: 200% 200%, 200% 200%, 200% 200%;
+    animation: bgShift 30s ease-in-out infinite alternate;
+    opacity: 1;
+  }
+
+  /* Grain SVG feTurbulence en data URI */
+  html::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  @keyframes bgShift {
+    0%   { background-position: 0% 0%, 100% 100%, 50% 50%; }
+    100% { background-position: 100% 100%, 0% 0%, 50% 50%; }
+  }
+
+  /* Accélération du fond quand audio joue */
+  body.is-playing html::before {
+    animation-duration: 10s;
+  }
+
+  /* --- TYPOGRAPHIE GÉANTE --- */
+  h1, h2, h3, .hero-title {
+    font-family: Impact, "Arial Black", "Helvetica Neue", sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  h1, .hero-title {
+    font-size: clamp(3rem, 12vw, 10rem);
+    -webkit-text-stroke: 2px var(--fg);
+    text-shadow:
+      2px 2px 0 var(--accent-magenta),
+      -2px -2px 0 var(--accent-cyan);
+    transition: text-shadow 0.3s ease;
+  }
+
+  h1:hover, .hero-title:hover {
+    text-shadow:
+      -2px -2px 0 var(--accent-magenta),
+      2px 2px 0 var(--accent-cyan);
+  }
+
+  h2 { font-size: clamp(2rem, 8vw, 6rem); }
+  h3 { font-size: clamp(1.5rem, 5vw, 3rem); }
+
+  /* --- BANDEAU DÉFILANT (marquee) --- */
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.5rem 0;
+    font-family: Impact, "Arial Black", sans-serif;
+    font-weight: 900;
+    font-size: clamp(1rem, 3vw, 2rem);
+    text-transform: uppercase;
+    border-top: 3px solid var(--border);
+    border-bottom: 3px solid var(--border);
+  }
+  .marquee__track {
+    display: inline-flex;
+    animation: marqueeScroll 20s linear infinite;
+  }
+  .marquee__track:hover { animation-play-state: paused; }
+
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* --- AUTOCOLLANTS (stickers) --- */
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 3px solid var(--border);
+    background: var(--accent);
+    color: var(--bg);
+    font-family: Impact, "Arial Black", sans-serif;
+    font-weight: 900;
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    text-transform: uppercase;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .sticker:nth-child(odd)  { transform: rotate(-3deg); }
+  .sticker:nth-child(even) { transform: rotate(3deg); }
+
+  .sticker:hover,
+  .sticker:focus {
+    transform: rotate(0deg) translateY(-2px);
+    box-shadow: 6px 6px 0 var(--fg);
+    outline: none;
+  }
+
+  /* Pulsation des stickers quand audio joue */
+  body.is-playing .sticker {
+    animation: stickerPulse 0.8s ease-in-out infinite;
+  }
+
+  @keyframes stickerPulse {
+    0%, 100% { transform: rotate(var(--r, 0deg)) scale(1); }
+    50%      { transform: rotate(var(--r, 0deg)) scale(1.05); }
+  }
+
+  /* Bouton Hasard (sticker fixe) */
+  #random-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    padding: 0.75rem 1.25rem;
+    --r: 0deg;
+  }
+  #random-btn:nth-child(odd)  { transform: rotate(-3deg); }
+  #random-btn:nth-child(even) { transform: rotate(3deg); }
+
+  /* Bouton theme toggle (sticker) */
+  #theme-toggle-btn {
+    border-radius: 0 !important;
+    border: 3px solid var(--border) !important;
+    background: var(--accent) !important;
+    box-shadow: var(--shadow) !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0.5rem 1rem !important;
+    transform: rotate(-2deg) !important;
+  }
+  #theme-toggle-btn:hover {
+    transform: rotate(0deg) translateY(-2px) !important;
+    box-shadow: 6px 6px 0 var(--fg) !important;
+  }
+  #theme-toggle-btn .icon {
+    display: none; /* on utilise le texte du bouton */
+  }
+  #theme-toggle-btn::before {
+    content: "☀️";
+    font-size: 1.2rem;
+  }
+  html.dark #theme-toggle-btn::before,
+  @media (prefers-color-scheme: dark) {
+    html:not(.light) #theme-toggle-btn::before {
+      content: "🌙";
+    }
+  }
+
+  /* --- POCHETTES / IMAGES VIVANTES --- */
+  .releasecover,
+  img[alt*="cover" i],
+  .artist-photo {
+    transition: transform 0.15s ease-out;
+    transform-style: preserve-3d;
+  }
+
+  /* Révélation au scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px) rotate(-2deg);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  /* --- PLAYER AUDIO — stylisation seulement --- */
+  #bottomplayer {
+    border-top: 4px solid var(--border) !important;
+    background: var(--accent) !important;
+  }
+  #bottomplayer-background {
+    background: var(--accent) !important;
+    border-top: 3px solid var(--border);
+  }
+  .control {
+    border: 3px solid var(--border) !important;
+    background: var(--bg) !important;
+    box-shadow: var(--shadow) !important;
+    border-radius: 0 !important;
+  }
+  .control:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0 var(--fg) !important;
+  }
+  progress.amplitude-song-played-progress,
+  #current-song-played-progress {
+    border: 2px solid var(--border) !important;
+    border-radius: 0 !important;
+  }
+  progress[value]::-webkit-progress-value,
+  progress[value]::-moz-progress-bar {
+    background: var(--fg) !important;
+  }
+
+  /* --- GENERAL --- */
+  body {
+    background: var(--bg) !important;
+    color: var(--fg) !important;
+  }
+  a { color: var(--accent); text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.15s; }
+  a:hover { border-color: var(--accent); }
+  button, .button { font-family: inherit; }
+}
+
+/* --------------------------------------------------------------------------
+   FALLBACK — Sans JS / reduced motion : styles de base lisibles
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html::before { animation: none; background: var(--bg); }
+  html::after { display: none; }
+  .marquee__track { animation: none; }
+  .sticker { transform: none !important; animation: none !important; }
+  #theme-toggle-btn { transform: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  h1, .hero-title { text-shadow: none; -webkit-text-stroke: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.is-playing html::before { animation: none; }
+  body.is-playing .sticker { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   UTILITAIRES
+   -------------------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}

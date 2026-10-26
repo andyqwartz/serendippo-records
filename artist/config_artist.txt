@@ -35,10 +35,10 @@ template: spore
 # /!\ appliqué à toutes les pages !
 font: inter
 
-main_color : "#7e61d4"
+main_color : "#FF2E93"
 
-second_color : "#5a42a6"
+second_color : "#2B2BFF"
 
-background_color : "#ffffff"
+background_color : "#F3F0FF"
 
-font_color : "#1a1a1a"
+font_color : "#14112B"

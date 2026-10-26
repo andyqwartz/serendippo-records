@@ -47,6 +47,12 @@ def buildIndex(artist, artistfolder = Path, outputfolder = Path):
     shutil.copytree(TEMPLATES / theme / "img", OUTPUT / "img", dirs_exist_ok="True")
     shutil.copytree(TEMPLATES / theme / "js", OUTPUT / "js", ignore=ignore_patterns("release.js"), dirs_exist_ok="True")
 
+    # copy custom.css and custom.js to output root
+    for custom_file in ("custom.css", "custom.js"):
+        src = TEMPLATES / theme / custom_file
+        if src.exists():
+            shutil.copy(src, OUTPUT / custom_file)
+
     # copy files
     for i in artist["artistimg"]:
         shutil.copy(i, OUTPUT / "img")
@@ -121,10 +127,16 @@ def buildRelease(artist,release_name, release_data, artistfolder = Path, outputf
         f.write(html)
 
     # CSS write
-    with open(release_dir / (f"{release_name}.css"), "w", encoding="utf-8") as f:
-        f.write(css)
-    
-    # JS write
+        with open(release_dir / (f"{release_name}.css"), "w", encoding="utf-8") as f:
+            f.write(css)
+
+        # copy custom.css and custom.js to release directory
+        for custom_file in ("custom.css", "custom.js"):
+            src = TEMPLATES / theme / custom_file
+            if src.exists():
+                shutil.copy(src, release_dir / custom_file)
+
+        # JS write
     with open(OUTPUT / (f"js/{release_name}.js"), "w", encoding="utf-8") as f:
         f.write(js)
 
