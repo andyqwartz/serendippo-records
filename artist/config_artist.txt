@@ -1,0 +1,44 @@
+# -------------------------- INFOS DE L'ARTISTE ------------------------------
+
+artist: SERENDIPPO RECORDS
+
+artist_description: Label créatif et artistique — musique, artworks et projets visuels.
+
+links:
+    Spotify:
+    Deezer:
+    YouTube:
+    Soundcloud:
+    Instagram:
+    TikTok:
+    Site web perso:
+
+tips_links:
+    Buy me a coffee:
+    Tipeee:
+    Patreon:
+
+friend_links:
+    artiste1:
+        friend_link:
+        friend_description:
+    nom artiste 2:
+        friend_link:
+        friend_description:
+
+
+# -------------------------- PARAMÈTRES VISUELS ------------------------------
+
+# /!\ appliqué à toutes les pages !
+template: spore
+
+# /!\ appliqué à toutes les pages !
+font: inter
+
+main_color : "#7e61d4"
+
+second_color : "#5a42a6"
+
+background_color : "#ffffff"
+
+font_color : "#1a1a1a"

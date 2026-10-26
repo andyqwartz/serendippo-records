@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 35.1 35.1">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1d1d1b;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="_05.02.00-Example-SingleSong" data-name=" 05.02.00-Example-SingleSong">
+    <g id="HD_05.02.00-Example-SingleSong" data-name="HD 05.02.00-Example-SingleSong">
+      <g id="Body">
+        <g id="Content">
+          <g id="Example">
+            <g id="Player">
+              <g id="Bottom">
+                <g id="Play_Pause" data-name="Play Pause">
+                  <g id="Group">
+                    <path id="Shape" class="cls-1" d="M12.5,5.9h-3.6c-1,0-1.8.9-1.8,1.8v19.6c0,1,.9,1.8,1.8,1.8h3.6c1,0,1.8-.9,1.8-1.8V7.7c0-1-.9-1.8-1.8-1.8Z"/>
+                    <path id="Shape-2" class="cls-1" d="M26.2,5.9h-3.6c-1,0-1.8.9-1.8,1.8v19.6c0,1,.9,1.8,1.8,1.8h3.6c1,0,1.8-.9,1.8-1.8V7.7c0-1-.9-1.8-1.8-1.8Z"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

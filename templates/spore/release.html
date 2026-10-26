@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ release.config_release.release_title }}</title>
+    <link rel="stylesheet" href="{{ release.slug }}.css">
+    <link rel="icon" type="image/x-icon" href="../img/favicon_release.ico">
+    <script type="text/javascript" src="../js/amplitude.min.js"></script>
+    <script type="importmap">
+    {
+    "imports": {
+        "three": "../js/three.module.js",
+        "orbit": "../js/orbit-controls.js"
+    }
+    }
+    </script>
+    <script src='../js/canvas.js' defer type="module"></script>
+</head>
+<body>
+
+<main id="page">
+
+    <section id="listening">
+
+
+        <!-- --------------------- INFOS HAUT DE PAGE --------------------- -->
+
+        <article id="header">
+
+            <div class="mobilegrid">
+                {% for releasecover in release.cover %}
+                    <img src="media/{{releasecover.name}}" class="releasecover" alt="Cover">
+                {% endfor %}
+                
+                <!-- Menu uniquement sur ordi -->
+                <article class="laptop">
+                    <article id="release-menu">
+
+                        <a class="icon" id="goback" href="../index.html"></a>
+
+                        <div onclick="copyToClipboard()" class="icon" id="share"></div> 
+
+                        <a class="icon" id="download" href="{{ release.slug }}.zip" download></a>
+
+                    </article>
+                </article>
+
+            </div>
+
+            <article id="data">
+
+                <div>
+                    <h2>{{ release.config_release.release_title }}</h2>
+                    <p>{{ release.config_release.release_artist }}</p>
+                    <p>{{ release.config_release.release_date }}</p>
+                </div>
+                
+                <div class="releasedescription">
+                    {{ release.config_release.release_description }}
+                </div>
+
+            </article>
+
+        </article>
+
+        <!-- Menu uniquement sur mobile -->
+        <article class="mobile">
+            <article id="release-menu">
+
+                <a class="icon" id="goback" href="../index.html"></a>
+
+                <div onclick="copyToClipboard()" class="icon" id="share"></div> 
+
+                <a class="icon" id="download" href="{{ release.slug }}.zip" download></a> 
+
+            </article>
+        </article>
+
+        {% for releasecover in release.cover %}
+            <img src="media/{{ releasecover.name }}" class="hidden" id="splashcover" alt="Cover">
+        {% endfor %}
+
+        <div class="splashscreen hidden" id="splashscreen"></div>
+
+        <!-- --------------------- TRACKLIST --------------------- -->
+
+        <article id="tracks">
+
+        {% for tracks, data_index in zip(release.tracks, release.data_index)  %}
+           
+            <div class="track">
+                <div class="track-main">
+                    <div class="track-data">
+                        <p class="track-name">
+                            <span class="number">{{data_index + 1}}. </span>
+                            <span data-amplitude-song-info="name"  data-amplitude-song-index="{{data_index}}"></span>
+                        </p>
+
+                        <p class="track-duration">
+                            <span class="amplitude-duration-minutes" data-amplitude-song-index="{{data_index}}"></span>:<span class="amplitude-duration-seconds" data-amplitude-song-index="{{data_index}}"></span>
+                        </p>
+                    </div>
+
+                    <progress class="amplitude-song-played-progress" id="song-played-progress-{{data_index}}" data-amplitude-song-index="{{data_index}}"></progress>
+                </div>
+
+                <div class="control amplitude-play-pause" data-amplitude-song-index="{{data_index}}"></div>
+            </div>
+
+        {% endfor %}
+
+        </article>
+        
+        <div class="unwrap-container">
+            <div class="mobile arrow" id="tracks-unwrap" alt="arrow"></div>
+        </div>
+
+    </section>
+
+
+
+
+    <!-- --------------------- CANVAS POUR NUAGE D'IMAGES --------------------- -->
+
+    <section id="canvas">
+        
+         <!-- Les images sont stockées ici par le script Python puis récupérées par le canvas de ThreeJS  -->
+        <div class="hidden">
+
+            {% for randomimg in release.randommedia  %}
+                <img src="media/randommedia/{{ randomimg }}" class="to-place" alt="">
+            {% endfor %}
+            {% for randomimg in release.randommedia_transparency  %}
+                <img src="media/randommedia/{{ randomimg }}" class="to-place" alt="">
+            {% endfor %}
+        </div>
+
+        <div class="mobile arrow" style="transform: rotate(180deg);" id="exit-canvas" alt="arrow"></div>
+    </section>
+
+</main>
+
+
+
+
+<!-- --------------------- PLAYER AUDIO EN BAS DE PAGE --------------------- -->
+
+<article id="bottomplayer">
+
+    <progress class="amplitude-song-played-progress" id="current-song-played-progress"></progress>
+
+    <div id="bottomplayer-background">
+
+            <div id="controls">
+                <div id="prev-container">
+                <div class="control amplitude-prev" id="previous"></div>
+                </div>
+
+                <div id="play-pause-container">
+                <div class="control amplitude-play-pause" id="play-pause-bottom"></div>
+                </div>
+
+                <div id="next-container">
+                <div class="control amplitude-next" id="next"></div>
+                </div>
+            </div>
+
+            <div id="song-data">
+                <span data-amplitude-song-info="name" class="song-name"></span>
+
+                <div class="song-artist-album">
+                    <span data-amplitude-song-info="artist"></span>
+                </div>
+            </div>
+
+
+        <div class="time-container">
+            <span class="current-time">
+                <span class="amplitude-current-minutes"></span>:<span class="amplitude-current-seconds"></span>/
+            </span> 
+            <span class="duration">
+                <span class="amplitude-duration-minutes"></span>:<span class="amplitude-duration-seconds"></span>
+            </span>
+        </div>
+
+    </div>
+
+</article>
+
+<!-- Theme toggle button -->
+<button id="theme-toggle-btn" aria-label="Basculer mode clair/sombre" title="Mode clair/sombre">
+    <span class="icon"></span>
+</button>
+
+<script type="text/javascript" src="../js/{{ release.slug }}.js"></script>
+<script src="../js/utils.js"></script>
+
+<script>
+// Theme toggle functionality
+(function() {
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+    const html = document.documentElement;
+    const STORAGE_KEY = 'theme-preference';
+    
+    // Initialize theme from localStorage or system preference
+    function initTheme() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'dark' || (saved === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else if (saved === 'light') {
+            html.classList.add('light');
+        }
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+        const isDark = html.classList.toggle('dark');
+        html.classList.toggle('light', !isDark);
+        localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
+    }
+    
+    // Listen for system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            if (e.matches) {
+                html.classList.add('dark');
+                html.classList.remove('light');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+            }
+        }
+    });
+    
+    initTheme();
+    toggleBtn.addEventListener('click', toggleTheme);
+})();
+
+// Copier l'adresse de la page dans le presse papier
+function copyToClipboard(text) {
+    var inputc = document.body.appendChild(document.createElement("input"));
+    inputc.value = window.location.href;
+    inputc.focus();
+    inputc.select();
+    document.execCommand('copy');
+    inputc.parentNode.removeChild(inputc);
+    alert("Adresse de la page copiée dans le presse papiers !.");
+}
+</script>
+
+<script>
+// zoom sur la cover
+var releasecover = document.querySelector('.releasecover')
+var splashscreen = document.getElementById('splashscreen')
+var splashcover = document.getElementById('splashcover')
+
+releasecover.addEventListener('click', (e) => {
+
+        if(splashscreen.classList.contains('hidden')){
+            splashscreen.classList.remove('hidden')
+            splashcover.classList.remove('hidden')
+        } 
+        else {
+            splashscreen.classList.add('hidden')
+            splashcover.classList.add('hidden')
+        }
+    })
+
+
+splashscreen.addEventListener("click", (event) => {
+
+    splashscreen.classList.add('hidden');
+    splashcover.classList.add('hidden')
+  })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ release.config_release.release_title }}</title>
+    <link rel="stylesheet" href="{{ release.slug }}.css">
+    <link rel="icon" type="image/x-icon" href="../img/favicon_release.ico">
+    <script type="text/javascript" src="../js/amplitude.min.js"></script>
+</head>
+<body>
+
+<main id="page">
+
+    <section id="listening">
+
+
+    
+        <!-- --------------------- INFOS HAUT DE PAGE --------------------- -->
+
+        <article id="header">
+            <div>
+                {% for releasecover in release.cover %}
+                    <img src="media/{{releasecover.name}}" class="releasecover" alt="Cover">
+                {% endfor %}
+            </div>
+            
+
+            <article id="data">
+
+                <div>
+                    <h2>{{ release.config_release.release_title }}</h2>
+                    <p>{{ release.config_release.release_artist }}</p>
+                    <p>{{ release.config_release.release_date }}</p>
+                </div>
+
+                <article id="release-menu">
+
+                    <a class="icon" id="goback" href="../index.html"></a>
+
+                    <div onclick="copyToClipboard()" class="icon" id="share"></div> 
+
+                    <a class="icon" id="download" href="{{ release.slug }}.zip" download></a> 
+
+                </article>
+
+            </article>
+
+
+        </article>
+
+<!-- --------------------- TRACKLIST --------------------- -->
+
+        <article id="tracks">
+
+        {% for tracks, data_index in zip(release.tracks, release.data_index)  %}
+            
+            <div class="track">
+                <div class="track-main">
+                    <div class="track-data">
+                        <p class="track-name">
+                            <span class="number">{{data_index + 1}}. </span>
+                            <span data-amplitude-song-info="name"  data-amplitude-song-index="{{data_index}}"></span>
+                        </p>
+
+                        <p class="track-duration">
+                            <span class="amplitude-duration-minutes" data-amplitude-song-index="{{data_index}}"></span>:<span class="amplitude-duration-seconds" data-amplitude-song-index="{{data_index}}"></span>
+                        </p>
+                    </div>
+
+                    <progress class="amplitude-song-played-progress" id="song-played-progress-{{data_index}}" data-amplitude-song-index="{{data_index}}"></progress>
+                </div>
+
+                <div class="control amplitude-play-pause" data-amplitude-song-index="{{data_index}}"></div>
+            </div>
+
+        {% endfor %}
+
+        </article>
+
+        <div class="description-wrapper">
+                <div markdown="block" class="releasedescription">
+                    {{ release.config_release.release_description }}
+                </div>
+        </div>
+
+
+    </section>
+
+
+
+<!-- Les images sont stockées ici par le script Python en attendant de les afficher aléatoirement -->
+<section id="scroll">
+
+    {% for randomimg in release.randommedia  %}
+        <img src="media/randommedia/{{ randomimg }}" class="to-place" alt="">
+    {% endfor %}
+    {% for randomimg in release.randommedia_transparency  %}
+        <img src="media/randommedia/{{ randomimg }}" class="to-place" alt="">
+    {% endfor %}
+</section>
+
+
+</main>
+
+
+
+<article id="bottomplayer">
+
+    <progress class="amplitude-song-played-progress" id="current-song-played-progress"></progress>
+
+    <div id="bottomplayer-background">
+
+            <div id="controls">
+                <div id="prev-container">
+                <div class="control amplitude-prev" id="previous"></div>
+                </div>
+
+                <div id="play-pause-container">
+                <div class="control amplitude-play-pause" id="play-pause-bottom"></div>
+                </div>
+
+                <div id="next-container">
+                <div class="control amplitude-next" id="next"></div>
+                </div>
+            </div>
+
+            <div id="song-data">
+                <span data-amplitude-song-info="name" class="song-name"></span>
+
+                <div class="song-artist-album">
+                    <span data-amplitude-song-info="artist"></span>
+                </div>
+            </div>
+
+
+        <div class="time-container">
+            <span class="current-time">
+                <span class="amplitude-current-minutes"></span>:<span class="amplitude-current-seconds"></span>/
+            </span> 
+            <span class="duration">
+                <span class="amplitude-duration-minutes"></span>:<span class="amplitude-duration-seconds"></span>
+            </span>
+        </div>
+
+    </div>
+
+</article>
+
+
+
+
+<script type="text/javascript" src="../js/{{ release.slug }}.js"></script>
+<script type="text/javascript" src="../js/infinitescroll.js"></script>
+<script type="text/javascript" src="../js/parallax.js"></script>
+
+<script>
+
+// Copier l'adresse de la page dans le presse papier
+function copyToClipboard(text) {
+    var inputc = document.body.appendChild(document.createElement("input"));
+    inputc.value = window.location.href;
+    inputc.focus();
+    inputc.select();
+    document.execCommand('copy');
+    inputc.parentNode.removeChild(inputc);
+    alert("Adresse de la page copiée dans le presse papiers !.");
+}
+</script>
+
+</body>
+</html>

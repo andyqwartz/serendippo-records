@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ release.config_release.release_title }}</title>
+    <link rel="stylesheet" href="{{ release.slug }}.css">
+    <link rel="icon" type="image/x-icon" href="../img/favicon_release.ico">
+    <script type="text/javascript" src="../js/amplitude.min.js"></script>
+</head>
+<body>
+
+<main id="page">
+
+    <div id="background-gradient"></div>
+    <div id="background-image"></div>
+    <div id="background-solid"></div>
+
+    <section id="listening">
+
+
+
+    <!-- --------------------- INFOS HAUT DE PAGE --------------------- -->
+
+        <article class="box" id="header">
+
+            {% for releasecover in release.cover %}
+                <img src="media/{{releasecover.name}}" class="releasecover" alt="Cover">
+            {% endfor %}
+
+            <article id="data">
+                <div>
+                    <h2>{{ release.config_release.release_title }}</h2>
+                    <p>{{ release.config_release.release_artist }}</p>
+                </div>
+
+
+                <div class="flex-menu">
+                    <p>{{ release.config_release.release_date }}</p> 
+
+                    <div id="release-menu">
+                        <div class="link-name">
+                            <a class="icon" id="goback" href="../index.html"></a>
+                        </div>
+                        
+                        <div class="link-name">
+                            <div onclick="copyToClipboard()" class="icon" id="share"></div> 
+                        </div>
+
+                        <div class="link-name">
+                            <a class="icon" id="download" href="{{ release.slug }}.zip" download></a> 
+                        </div>
+                        
+                    </div>
+                </div>
+                                
+
+            </article>
+
+        </article>
+
+        <article class="box">
+                <div class="releasedescription">
+                    {{ release.config_release.release_description }}
+                </div>
+        </article>
+        
+        {% for releasecover in release.cover %}
+            <img src="media/{{ releasecover.name }}" class="hidden" id="splashcover" alt="Cover">
+        {% endfor %}
+
+        <div class="splashscreen hidden" id="splashscreen"></div>
+
+<!-- --------------------- TRACKLIST --------------------- -->
+        
+        <article id="tracks">
+
+        {% for tracks, data_index in zip(release.tracks, release.data_index)  %}
+            <div class="track">
+                <div class="track-main box">
+                    <div class="track-data">
+                        <p class="track-name">
+                            <span class="number">{{data_index + 1}}. </span>
+                            <span data-amplitude-song-info="name" data-amplitude-song-index="{{data_index}}"></span>
+                        </p>
+
+                        <p class="track-duration">
+                            <span class="amplitude-duration-minutes" data-amplitude-song-index="{{data_index}}"></span>:<span class="amplitude-duration-seconds" data-amplitude-song-index="{{data_index}}"></span>
+                        </p>
+                    </div>
+                        <div class="waveform-wrapper">
+                            <progress data-amplitude-song-index="{{data_index}}" class="amplitude-song-played-progress" id="color-mask"></progress>
+                            <div class="amplitude-wave-form" id="song-played-progress-{{data_index}}" data-amplitude-song-index="{{data_index}}"></div>
+                        </div>
+                </div>
+
+                <div class="control right-play-pause">
+                    <div class="control amplitude-play-pause" id="right-pause-svg" data-amplitude-song-index="{{data_index}}"></div>
+                </div>
+            </div>
+        {% endfor %}    
+
+        </article>
+
+    </section>
+
+</main>
+
+
+
+<!-- --------------------- ACCUMULATION RANDOM D'IMAGES --------------------- -->
+
+<!-- Template pour les img à placer -->
+<img src="media/randommedia/{{ randomimg }}" class="hidden" id="template" alt="">
+
+ <!-- Les images sont stockées ici par le script Python en attendant de les afficher aléatoirement  -->
+<div class="hidden">
+
+    {% for randomimg in release.randommedia  %}
+    <img src="media/randommedia/{{ randomimg }}" class="to-place" alt="random-img">
+    {% endfor %}
+
+    {% for randomimg_transparent in release.randommedia_transparency  %}
+    <img src="media/randommedia/{{ randomimg_transparent }}" class="to-place transparent-img" alt="random-img">
+    {% endfor %}
+
+</div>
+
+<img src="../img/emptybin.png" class="hidden" id="bin" alt="bin">
+<div class="amplitude-visualization" id="large-visualization"></div>
+
+
+
+
+<!-- --------------------- PLAYER AUDIO EN BAS DE PAGE --------------------- -->
+
+<article id="bottomplayer">
+
+    <progress class="amplitude-song-played-progress" id="current-song-played-progress"></progress>
+    
+    <div id="bottomplayer-background">
+
+            <div id="controls">
+                <div class="control-container">
+                    <div class="control control-bottom-player amplitude-prev" id="previous"></div>
+                </div>
+
+                <div class="control-container">
+                    <div class="control control-bottom-player amplitude-play-pause" id="play-pause-bottom"></div>
+                </div>
+
+                <div class="control-container">
+                    <div class="control control-bottom-player amplitude-next" id="next"></div>
+                </div>
+            </div>
+
+            <div id="song-data">
+                <span data-amplitude-song-info="name" class="bottomplayer-info song-name"></span>
+
+                <div class="song-artist-album">
+                    <span data-amplitude-song-info="artist" class="bottomplayer-info"></span>
+                </div>
+            </div>
+
+
+        <div class="time-container">
+            <span class="current-time bottomplayer-info">
+                <span class="amplitude-current-minutes"></span>:<span class="amplitude-current-seconds"></span>
+            </span>
+            <span class="duration bottomplayer-info laptop"> /
+                <span class="amplitude-duration-minutes"></span>:<span class="amplitude-duration-seconds"></span>
+            </span>
+        </div>
+
+    </div>
+
+</article>
+
+
+
+
+
+
+<script type="text/javascript" src="../js/random_img_placement.js"></script>
+<script type="text/javascript" src="../js/{{ release.slug }}.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/drag.js"></script>
+
+<script>
+// EMPTY THE BIN (#lafeve mdr)
+
+var trashbin = document.getElementById('bin')
+
+trashbin.addEventListener('click', (e) => {
+
+var placedImgs = document.querySelectorAll('.random-img')
+
+    placedImgs.forEach(img => {
+            img.remove();
+        }
+    )
+})
+
+// Copier l'adresse de la page dans le presse papier
+function copyToClipboard(text) {
+    var inputc = document.body.appendChild(document.createElement("input"));
+    inputc.value = window.location.href;
+    inputc.focus();
+    inputc.select();
+    document.execCommand('copy');
+    inputc.parentNode.removeChild(inputc);
+    alert("Adresse de la page copiée dans le presse papiers !.");
+}
+</script>
+
+<script>
+// zoom sur la cover
+var releasecover = document.querySelector('.releasecover')
+var splashscreen = document.getElementById('splashscreen')
+var splashcover = document.getElementById('splashcover')
+
+
+releasecover.addEventListener('click', (e) => {
+
+        if(splashscreen.classList.contains('hidden')){
+            splashscreen.classList.remove('hidden')
+            splashcover.classList.remove('hidden')
+        } 
+        else {
+            splashscreen.classList.add('hidden')
+            splashcover.classList.add('hidden')
+        }
+    })
+
+
+splashscreen.addEventListener("click", (event) => {
+
+    splashscreen.classList.add('hidden');
+    splashcover.classList.add('hidden')
+  })
+
+</script>
+
+</body>
+</html>

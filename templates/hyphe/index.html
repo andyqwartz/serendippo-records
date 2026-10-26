@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{artist.configs.artist}}</title>
+    <link rel="stylesheet" href="style_index.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon_index.ico">
+</head>
+<body>
+
+
+<!-- ------------------------- ARTIST --------------------------- -->
+
+
+
+<section>
+
+    <div id="banner">
+
+    </div>
+
+    <article id="header">
+
+        <div>
+        {% for artistimg in artist.artistimg %}
+            <img src="img/{{ artistimg.name }}" class="artist-photo" alt="Artist">
+        {% endfor %}
+        </div>        
+
+        <article class="mobile" id="links">
+
+            <div onclick="copyToClipboard()" class="link-name" id="button-share">
+                <div class="icon" id="share"></div> 
+                <p class="laptop">Partager cette page</p>
+            </div>
+            
+            <div class="link-name" id="button-socials">
+                <div class="icon" id="socials"></div>
+                <p class="laptop">Réseaux</p>
+            </div>
+
+            <div class="link-name" id="button-about">
+                <div class="icon" id="about"></div>
+                <p class="laptop">À propos</p>
+            </div> 
+
+            <div class="link-name" id="button-tips">
+                <div class="icon" id="tips"></div>
+                <p class="laptop">Me soutenir</p>
+            </div>
+
+        </article>
+
+        <div class="splashscreen hidden"></div>
+
+        <section class="hidden popup" id="popup-socials">
+            <h2>Mes réseaux :</h2>
+            <br>
+
+            {% for link_name, link in artist.configs.links.items()  %}
+            <p class="link-social">
+                {{ link_name }} : <a href="">{{ link }}</a>
+            </p>
+            {% endfor %}
+
+            <br>
+
+            <p>Mieux que Linktree :)</p>
+
+        </section>
+
+
+        <section class="hidden popup" id="popup-about">
+            <h2>À propos de ce site :</h2>
+
+            <br>
+
+            <p>
+                Ce site a été construit avec <a href="">HzMycelium</a>, un générateur de site statique pour musicien·nes indépendant·es. <br> <br>
+                • Pourquoi avoir besoin d'un site pour publier sa musique quand les plateformes existent ? <br>
+                • Qu'est-ce-que ce genre de site permet de faire ? <br>
+                • Comment générer et héberger le mien ? <br> <br>
+                Tout est expliqué et détaillé sur le <a href="">site de HzM</a>, je t'invite à aller lire tout ça !
+            </p>
+        </section>
+
+
+
+        <section class="hidden popup" id="popup-tips">
+            <h2>Soutenez-moi !</h2>
+
+            <br>
+
+            <p>
+                Tous les morceaux sur ce site sont disponibles à l'écoute et au téléchargement gratuitement ! <br> <br>
+                Si vous voulez me soutenir, vous pouvez le faire sur ce(s) site(s) : <br> <br>
+
+                {% for tiplink_name, tiplink in artist.configs.tips_links.items()  %}
+                    <a href="{{ tiplink }}">{{ tiplink_name }}</a> <br> 
+                {% endfor %}
+
+                <br> <br>
+                Merci :)
+            </p>
+
+        </section>
+
+    </article>
+
+    <div id="data">
+        <h2>{{artist.configs.artist}}</h2>
+        
+        <div markdown="block" class="releasedescription">
+            {{artist.configs.artist_description}}
+        </div>
+    </div>
+
+</section>
+
+
+
+<!-- ------------------------- MAIN BLOCK --------------------------- -->
+
+<article class="main">
+
+<!-- ------------------------- RELEASES --------------------------- -->
+
+    <article class="releaselist">
+
+        {% for release_name, release in artist.releases.items()  %}
+        <section class="release">
+            {% for releasecover in release.cover %}
+                <a href="{{ release.slug }}/{{ release.slug }}.html" class="releaselink">
+                    <img src="{{ release.slug }}/media/{{ releasecover.name }}" class="releasecover" alt="release cover">
+                </a>
+            {% endfor %}
+
+            <div class="releasetitle box">
+                {{release.config_release.release_title}} <br>
+                {{release.config_release.release_date}}
+            </div>
+        </section>
+        {% endfor %}
+        
+    </article>
+
+
+<!-- ------------------------- FRIENDS LIST --------------------------- -->
+
+    <section class="friendlist">
+
+        <h2>À écouter aussi !</h2>
+        
+        {% for friend_name, friend in artist.configs.friend_links.items()  %}
+        <article class="friend">
+            <p>
+                <a href="{{ friend.friend_link }}">{{ friend_name }}</a> <br>
+                {{ friend.friend_description }}
+            </p>
+        </article>
+        {% endfor %}
+
+    </section>
+
+</article>
+
+
+<script>
+
+// Pop ups des fenêtres du menu de navigation
+
+// Si quelqu'un passe par là,
+// Oui c'est horriblement fait à l'arrache il faudrait améliorer ça vraiment
+// genre qqchose qui associe chaque bouton à sa fenêtre Pop up
+// mais pour l'instant pas urgent
+
+let PopUps = document.querySelectorAll(".popup")
+
+var splashscreen = document.querySelector('.splashscreen');
+
+let socials = document.getElementById("button-socials")
+let about = document.getElementById("button-about")
+let tips = document.getElementById("button-tips")
+
+let socialsPop = document.getElementById("popup-socials")
+let aboutPop = document.getElementById("popup-about")
+let tipsPop = document.getElementById("popup-tips")
+
+
+socials.addEventListener('click', (e) => {
+
+      if(socialsPop.classList.contains('hidden')){
+        socialsPop.classList.remove('hidden')
+        splashscreen.classList.remove('hidden')
+      } 
+      else {
+        socialsPop.classList.add('hidden');
+      }
+})
+
+about.addEventListener('click', (e) => {
+
+      if(aboutPop.classList.contains('hidden')){
+        aboutPop.classList.remove('hidden')
+        splashscreen.classList.remove('hidden')
+      } 
+      else {
+        aboutPop.classList.add('hidden');
+      }
+})
+
+tips.addEventListener('click', (e) => {
+
+      if(tipsPop.classList.contains('hidden')){
+        tipsPop.classList.remove('hidden')
+        splashscreen.classList.remove('hidden')
+      } 
+      else {
+        tipsPop.classList.add('hidden');
+      }
+})
+
+
+splashscreen.addEventListener("click", (event) => {
+
+    splashscreen.classList.add('hidden');
+
+    PopUps.forEach(popup => {
+        popup.classList.add('hidden')
+  })
+})
+
+</script>
+
+<script>
+
+// Copier l'adresse de la page dans le presse papier
+function copyToClipboard(text) {
+    var inputc = document.body.appendChild(document.createElement("input"));
+    inputc.value = window.location.href;
+    inputc.focus();
+    inputc.select();
+    document.execCommand('copy');
+    inputc.parentNode.removeChild(inputc);
+    alert("Adresse de la page copiée dans le presse papiers !.");
+}
+</script>
+
+</body>
+</html>

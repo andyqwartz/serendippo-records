@@ -1,0 +1,21 @@
+# -------------------------- INFOS DE LA SORTIE ------------------------------
+
+release_artist: SERENDIPPO RECORDS
+
+release_title: 
+
+release_date: 
+
+release_description: 
+
+release_tracks: []
+
+# -------------------------- PARAMÈTRES VISUELS ------------------------------
+
+main_color : "#7e61d4"
+
+second_color : "#5a42a6"
+
+background_color : "#ffffff"
+
+font_color : "#1a1a1a"

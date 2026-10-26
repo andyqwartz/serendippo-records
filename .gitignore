@@ -1,0 +1,13 @@
+# *.mp3
+# *.png
+# *.jpg
+# *.webm
+# *.wav
+
+/__pycache__
+/venv
+/.venv
+/built_site
+build_obsolete.py
+site
+memory-bank/
